@@ -22,10 +22,11 @@ func IsPangram(s string) bool {
 		}
 	}
 
-	result := true
 	for _, seen := range seen_alpha {
-		result = result && seen
+		if !seen {
+			return false
+		}
 	}
 
-	return result
+	return true
 }

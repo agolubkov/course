@@ -1,3 +1,4 @@
+// Generating text of a song 'The Twelve Days of Christmas'
 package twelve
 
 var verse = map[string]string{
@@ -30,19 +31,25 @@ var wording = map[int]string{
 	12: "twelfth",
 }
 
+// Verse generates a verse by its number
 func Verse(i int) string {
-	// Тут має бути рішення
-	// написавши код - необхідно запустити тести
-	// Ці коментарі можна видаляти
-	// !ВАЖЛИВО - не забудьте виправити return
-	return ""
+	line := "On the " + wording[i] + " day of Christmas my true love gave to me"
+	for j := i; j >= 1; j-- {
+		if j == 1 && i != 1 {
+			line += ", and " + verse[wording[j]]
+		} else {
+			line += ", " + verse[wording[j]]
+		}
+
+	}
+	return line
 }
 
+// Song returns all the song as one string
 func Song() string {
 	var song = ""
-	// Тут має бути рішення
-	// написавши код - необхідно запустити тести
-	// Ці коментарі можна видаляти
-	// !ВАЖЛИВО - не забудьте виправити return
+	for i := 1; i <= len(wording); i++ {
+		song += Verse(i) + "\n"
+	}
 	return song
 }

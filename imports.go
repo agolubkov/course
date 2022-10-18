@@ -1,3 +1,7 @@
 package course
 
-import _ "github.com/agolubkov/course/week_1/twelve-days"
+import td "github.com/agolubkov/course/week_1/twelve-days"
+
+func PrintSong() {
+	println(td.Song())
+}

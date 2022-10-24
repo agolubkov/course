@@ -2,9 +2,10 @@ package main
 
 import "fmt"
 
+var mm map[string]string
+
 func main() {
-	var mm map[string]string
-	fmt.Println("uninitialized map", mm)
+	fmt.Println("uninitialized map", mm, len(mm), mm == nil)
 	// panic: assignment to entry in map
 	// mm["test"] = "ok"
 

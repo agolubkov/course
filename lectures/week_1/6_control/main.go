@@ -1,5 +1,10 @@
 package main
 
+func getValue(n map[string]string, key string) (string, bool) {
+	a, o := n[key]
+	return a, o
+}
+
 func main() {
 	a := true
 	if a {
@@ -12,13 +17,22 @@ func main() {
 	}
 
 	mm := map[string]string{"firstName": "Johnny", "lastName": "Cash"}
-	if firstName, ok := mm["firstName"]; ok {
-		println("firstName key exist, = ", firstName)
-	} else {
-		println("no firstName")
-	}
+	middleName, ok := mm["middleName"]
+	println(middleName, ok)
 
-	if firstName, ok := mm["firstName"]; !ok {
+	if firstName, ok := mm["firstName"]; ok || firstName == "Johnny" {
+		middleName = "Some"
+		println("firstName key exist, = ", firstName, "middleName", middleName)
+		mm["middleName"] = middleName
+	} else {
+		println("no firstName , ", firstName)
+	}
+	xa, c := 0, 3
+	println(xa, c)
+	c, xa = xa, c
+	println(xa, c)
+
+	if firstName, ok := getValue(mm, "firstName"); !ok {
 		println("no firstName")
 	} else if firstName == "Johnny" {
 		println("firstName is Johnny")
@@ -32,9 +46,10 @@ func main() {
 	}
 
 	sl := []int{3, 4, 5, 6, 7, 8}
-	value := 0
-	idx := 0
-
+	// value := 0
+	// idx := 0
+	var idx int
+	var value int
 	// Операції з slice
 	for idx < 4 {
 		if idx < 2 {
@@ -102,6 +117,9 @@ func main() {
 Loop:
 	for key, val := range mm {
 		println("switch in loop", key, val)
+		if val == "" {
+			break
+		}
 		switch {
 		case key == "firstName" && val == "Vasily":
 			println("switch - break loop here")

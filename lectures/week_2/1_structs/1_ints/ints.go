@@ -20,6 +20,20 @@ func (m *MyInt) add(i MyInt) {
 	*m = *m + MyInt(i)
 }
 
+func LogSomeData(in fmt.Stringer) {
+	fmt.Printf("data: %s\n", in.String())
+}
+
+type kilometer int
+
+func (k *kilometer) String() string {
+	return fmt.Sprintf("%09d km", k)
+}
+
+func (m *MyStruct) String() string {
+	return "Num: " + fmt.Sprintf("%d", m.Num) + " and Name: " + m.Name
+}
+
 type mySliceSorted interface {
 	sorter() mySliceStruct
 }
@@ -34,8 +48,12 @@ func main() {
 	var sorter mySliceSorted = toSort
 	sorter = sorter.sorter()
 	fmt.Println(sorter)
+	tenKm := kilometer(10)
+	LogSomeData(&tenKm)
+	LogSomeData(&toSort[0])
 }
 
+// sorter implements interface mySliceSorted
 func (sl mySliceStruct) sorter() mySliceStruct {
 	sort.Slice(sl, func(i, j int) bool {
 		return sl[i].Num < sl[j].Num

@@ -1,6 +1,11 @@
 # Практика
 
 > Назви гілок відповідають номеру тижня курсу. week_1, week_2 і так далі
+
+Завдання на 1/11/2022 тут:[Readme.md](week_2/interfaces/imports/Readme.md)
+
+Code **here** : [week_2/interfaces/imports](week_2/interfaces/imports)
+
 ## Початкова підготовка
 1. Налаштовуєте git (*опціонально, якщо не налаштовано*)
 ```sh

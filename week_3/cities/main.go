@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"sync/atomic"
 	"time"
 	"unicode"
 )
@@ -18,6 +19,7 @@ var byletter = make(map[rune][]string, 26)
 const (
 	maxPlayers       = 13
 	checkLetterLimit = 5
+	csvFile          = "cities15000.csv"
 	csvColumn        = 1 // [utf8]name=0, asciiname=1
 )
 
@@ -29,6 +31,7 @@ var allPlayers = [maxPlayers]string{
 
 var canBegin = make(chan bool)
 var endOfGame = make(chan bool)
+var turn uint64
 
 func cleanName(name string) string {
 	name, _, _ = strings.Cut(name, " (")
@@ -76,7 +79,7 @@ func askNumPlayers() (numPlayers int) {
 func readCities() {
 	var unique = make(map[string]struct{}, 24737)
 
-	f, err := os.Open("cities15000.csv")
+	f, err := os.Open(csvFile)
 	if err != nil {
 		log.Fatal("Error opening file:", err)
 	}
@@ -103,10 +106,10 @@ func readCities() {
 		cityname := cleanName(rec[csvColumn])
 
 		if _, ok := unique[cityname]; !ok {
-			first := firstLetter(cityname)
-			byletter[first] = append(byletter[first], cityname)
+			firstLetter := firstLetter(cityname)
+			byletter[firstLetter] = append(byletter[firstLetter], cityname)
 			unique[cityname] = struct{}{}
-			letters = append(letters, first)
+			letters = append(letters, firstLetter)
 		}
 
 	}
@@ -125,6 +128,10 @@ func main() {
 	startingCity := cities[rand.Intn(len(cities))]
 
 	fmt.Println("Start of game =", startingCity)
+
+	rand.Shuffle(len(allPlayers), func(i, j int) {
+		allPlayers[i], allPlayers[j] = allPlayers[j], allPlayers[i]
+	})
 
 	ch1 := make(chan string)
 	ch := ch1
@@ -148,7 +155,7 @@ func main() {
 
 	<-endOfGame
 
-	fmt.Println("End of game")
+	fmt.Println("End of game on", turn, "turn")
 }
 
 func play(id int, name string, in <-chan string, out chan<- string) {
@@ -177,12 +184,13 @@ func play(id int, name string, in <-chan string, out chan<- string) {
 		}
 
 		log.Printf("[%v] %v says\t%v\n", id, name, outCity)
+		atomic.AddUint64(&turn, 1)
 		// logrus.WithFields(logrus.Fields{
-		// 	"id": id,
-		// 	"name": name,
-		// 	"quest": inCity,
+		// 	"id":       id,
+		// 	"name":     name,
+		// 	"quest":    inCity,
 		// 	"response": outCity,
-		//   }).Info("New Round")
+		// }).Info("New Round")
 		out <- outCity
 	}
 }

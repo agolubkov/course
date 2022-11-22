@@ -24,7 +24,15 @@ type stuff struct {
 }
 
 func (s stuff) SomeComplex() {
-	s.DoStuff()
+	if s.iStuff != nil {
+		s.DoStuff()
+	} else {
+		fmt.Println("can't do stuff")
+	}
+}
+
+func showDecorator(in iStuff) {
+	fmt.Printf("%T: %+v\n", in, in)
 }
 
 func main() {
@@ -32,11 +40,16 @@ func main() {
 	f := fakeStuff(0)
 
 	rS := stuff{r, "stuff"}
-
+	showDecorator(&rS)
 	rS.SomeComplex()
 
 	fS := stuff{f, "fake"}
 
 	fS.SomeComplex()
-
+	fS.DoStuff()
+	showDecorator(&fS)
+	pS := stuff{Name: "panic"}
+	showDecorator(&pS)
+	pS.SomeComplex()
+	// pS.DoStuff() !!panic
 }

@@ -7,9 +7,8 @@ import (
 
 func main() {
 	// Call the testPanic function to run the test.
-
+	defer catchPanic(nil)
 	if err := testPanic(); err != nil {
-		defer catchPanic(err)
 		fmt.Println("Error:", err)
 	}
 }
@@ -17,30 +16,31 @@ func main() {
 // testPanic simulates a function that encounters a panic to
 // test our catchPanic function.
 func testPanic() (err error) {
-	var ok bool
 	// Schedule the catchPanic function to be called when
 	// the testPanic function returns.
-	defer func() {
-		// Check if a panic occurred.
-		if r := recover(); r != nil {
-			if err, ok = r.(error); ok {
-				fmt.Println(err)
+	/*
+		defer func() {
+			// Check if a panic occurred.
+			var ok bool
+			if r := recover(); r != nil {
+				if err, ok = r.(error); ok {
+					fmt.Printf("recovered error: %v\n", err)
+				}
+				fmt.Println("PANIC Deferred")
+				// Capture the stack trace.
+				buf := make([]byte, 10000)
+				runtime.Stack(buf, false)
+				fmt.Println("Stack Trace:", string(buf))
+				// If the caller wants the error back provide it.
+				if err != nil {
+					err = fmt.Errorf("%v", r)
+				}
 			}
-			fmt.Println("PANIC Deferred")
-			// Capture the stack trace.
-			buf := make([]byte, 10000)
-			runtime.Stack(buf, false)
-			fmt.Println("Stack Trace:", string(buf))
-			// If the caller wants the error back provide it.
-			if err != nil {
-				err = fmt.Errorf("%v", r)
-			}
-		}
-	}()
+		}()*/
 
 	fmt.Println("Start Test")
 
-	panic(fmt.Errorf("At the disco"))
+	// panic(fmt.Errorf("At the disco"))
 
 	// Mimic a traditional error from a function.
 	err = mimicError("1")
@@ -48,6 +48,7 @@ func testPanic() (err error) {
 	// Trying to dereference a nil pointer will cause the
 	// runtime to panic.
 	var p *int
+	// p = new(int)
 	*p = 10
 
 	fmt.Println("End Test")

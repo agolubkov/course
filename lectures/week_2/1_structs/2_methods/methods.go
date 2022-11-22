@@ -14,14 +14,16 @@ func (v *Vertex) Abs() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
-func (v *Vertex) Scale(f float64) {
+func (v *Vertex) Scale(f float64) float64 {
 	v.X = v.X * f
 	v.Y = v.Y * f
+	return v.X + v.Y
 }
 
-func (v Vertex) noScale(f float64) {
+func (v Vertex) noScale(f float64) float64 {
 	v.X = v.X * f
 	v.Y = v.Y * f
+	return v.X + v.Y
 }
 
 func main() {
@@ -31,6 +33,9 @@ func main() {
 	fmt.Println(v.Abs())
 	fmt.Println(v.X)
 
-	v.noScale(10)
+	fmt.Println(v.Scale(10))
+	fmt.Println(v)
+	fmt.Println(v.noScale(10))
+	fmt.Println(v)
 	fmt.Println(v.Abs())
 }

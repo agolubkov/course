@@ -10,6 +10,7 @@ type Ny func() func(string) string
 func main() {
 	var myTime Ny
 	myTime = sss()
+	myTime()
 	mt2 := myTime
 	mt2()
 	f := func() {
@@ -25,9 +26,10 @@ func main() {
 }
 
 func sss() func() func(string) string {
+	getTimer()()
 	start := time.Now()
 	return func() func(string) string {
-		fmt.Printf("Time from start %v", time.Since(start))
+		fmt.Printf("Time from start %v\n", time.Since(start))
 		return getTime
 	}
 }
@@ -35,10 +37,10 @@ func sss() func() func(string) string {
 func getTimer() func() {
 	start := time.Now()
 	return func() {
-		fmt.Printf("Time from start %v\n", time.Since(start))
+		fmt.Printf("getTimer: Time from start %v\n", time.Since(start))
 	}
 }
 
 func getTime(name string) string {
-	return fmt.Sprintf("Hi, %s! %v", name, time.Now().String())
+	return fmt.Sprintf("Hi, %s! %v\n", name, time.Now().String())
 }

@@ -37,4 +37,5 @@ func main() {
 	sa := SecretAgent{Person: Person{"James", "12312321321"}, Stuff: Stuff{inn: 7}, LicenseToKill: true}
 
 	fmt.Printf("info: %T %+v\n", sa, sa)
+	fmt.Printf("secret info: %s, inn: %s", sa.Person.GetName(), sa.Person.inn)
 }

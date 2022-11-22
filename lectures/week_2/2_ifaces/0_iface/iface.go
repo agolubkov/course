@@ -31,15 +31,33 @@ func (m Mig45) Fly() {
 }
 
 func main() {
-	duckPlane := Bird{"Duck plane"}
+	duckPlane := &Bird{"Duck plane"}
 
 	GoFly(duckPlane)
+	GoFly("something")
+	GoFly(1111)
+	GoFly(&struct {
+		Alpha string
+		Beta  int
+	}{
+		"10",
+		10,
+	})
 }
 
-func GoFly(f Flyer) {
-	f.Fly()
-	//b := f.(Bird)
+func GoFly(x interface{}) {
+	fmt.Printf("%T: %+v\n", x, x)
+	f, isFlyer := x.(Flyer)
+	if isFlyer {
+		f.Fly()
+	}
 
+	// b := f.(Bird)
+	if _, ok := x.(string); !ok {
+		fmt.Println("not a string")
+	} else {
+		fmt.Println("this is string")
+	}
 	if b, ok := f.(Bird); ok {
 		fmt.Println(b.Name)
 	}

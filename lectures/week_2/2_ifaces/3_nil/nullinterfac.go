@@ -3,9 +3,10 @@ package main
 import "fmt"
 
 func main() {
-	var z interface{}
+	var empty *myError
+	var z badError = empty
 
-	fmt.Printf("%v %v\n", z, z == nil)
+	fmt.Printf("%v %v\n, empty is nill: %v\n ", z, z == nil, empty == nil)
 
 	if f := getNil(10); f != nil {
 		fmt.Println("i'm not nill")
@@ -14,6 +15,10 @@ func main() {
 	if f := getNil("2nd"); f == nil {
 		fmt.Println("but i actually am nil")
 	}
+}
+
+type badError interface {
+	Error() string
 }
 
 type myError string

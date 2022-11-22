@@ -13,9 +13,6 @@ import (
 	"unicode"
 )
 
-var letters []rune
-var byletter = make(map[rune][]string, 26)
-
 const (
 	maxPlayers       = 13
 	checkLetterLimit = 5
@@ -23,15 +20,20 @@ const (
 	csvColumn        = 1 // [utf8]name=0, asciiname=1
 )
 
-var allPlayers = [maxPlayers]string{
-	"James", "Mary", "Rob", "Patti", "John",
-	"Linda", "Mike", "Jenny", "David", "Beth",
-	"Bill", "Barbara", "Rich",
-}
+var (
+	letters  []rune
+	byletter = make(map[rune][]string, 26)
 
-var canBegin = make(chan bool)
-var endOfGame = make(chan bool)
-var turn uint64
+	canBegin  = make(chan bool)
+	endOfGame = make(chan bool)
+	turn      uint64
+
+	allPlayers = [maxPlayers]string{
+		"James", "Mary", "Rob", "Patti", "John",
+		"Linda", "Mike", "Jenny", "David", "Beth",
+		"Bill", "Barbara", "Rich",
+	}
+)
 
 func cleanName(name string) string {
 	name, _, _ = strings.Cut(name, " (")
@@ -169,9 +171,9 @@ func play(id int, name string, in <-chan string, out chan<- string) {
 			return r
 		}, inCity))
 
-		// Find outCity by trying last letter, then previous, up to len-5 (or outCity is out of letters)
+		// Find outCity by trying last letter, then previous, up to len-5 (or filteredCity is out of letters)
 		outCity := ""
-		for try := 0; try < checkLetterLimit && len(filteredCity) > try; try++ {
+		for try := 0; try < checkLetterLimit && try < len(filteredCity); try++ {
 			letter := filteredCity[len(filteredCity)-try-1]
 			outCity = findCity(unicode.ToLower(letter))
 			if outCity != "" {
